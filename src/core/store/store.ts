@@ -1,11 +1,11 @@
 import { configureStore } from '@reduxjs/toolkit'
 
-import { counterReducer } from '@/features/counter/model/counterSlice'
+import { authReducer } from '@/features/auth'
 
 export const makeStore = () => {
 	return configureStore({
 		reducer: {
-			counter: counterReducer
+			auth: authReducer
 		}
 	})
 }

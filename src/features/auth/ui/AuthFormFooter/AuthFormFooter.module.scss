@@ -1,0 +1,23 @@
+.authFooter {
+	text-align: center;
+	margin-top: 24px;
+	padding-top: 24px;
+	border-top: 1px solid #e5e7eb;
+}
+
+.authLink {
+	color: #667eea;
+	text-decoration: none;
+	font-weight: 500;
+	transition: color 0.2s ease;
+
+	&:hover {
+		color: #764ba2;
+		text-decoration: underline;
+	}
+}
+
+.authText {
+	font-size: 14px;
+	color: #6b7280;
+}

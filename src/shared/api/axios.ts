@@ -1,4 +1,8 @@
-import axios from 'axios'
+import axios, { AxiosError, InternalAxiosRequestConfig } from 'axios'
+
+interface CustomAxiosRequestConfig extends InternalAxiosRequestConfig {
+	_retry?: boolean
+}
 
 export const apiClient = axios.create({
 	baseURL: process.env.NEXT_PUBLIC_API_URL,
@@ -9,15 +13,34 @@ export const apiClient = axios.create({
 	withCredentials: true
 })
 
+const getAccessToken = (): string | null => {
+	if (typeof window !== 'undefined') {
+		return localStorage.getItem('accessToken')
+	}
+	return null
+}
+
+const setAccessToken = (token: string): void => {
+	if (typeof window !== 'undefined') {
+		localStorage.setItem('accessToken', token)
+	}
+}
+
+const removeAccessToken = (): void => {
+	if (typeof window !== 'undefined') {
+		localStorage.removeItem('accessToken')
+	}
+}
+
 apiClient.interceptors.request.use(
-	config => {
-		const token = localStorage.getItem('accessToken')
+	(config: CustomAxiosRequestConfig) => {
+		const token = getAccessToken()
 		if (token) {
 			config.headers.Authorization = `Bearer ${token}`
 		}
 		return config
 	},
-	error => {
+	(error: AxiosError) => {
 		return Promise.reject(error)
 	}
 )
@@ -25,21 +48,29 @@ apiClient.interceptors.request.use(
 let isRefreshing = false
 let refreshSubscribers: ((token: string) => void)[] = []
 
-function onRefreshed(token: string) {
+const onRefreshed = (token: string) => {
 	refreshSubscribers.forEach(callback => callback(token))
 	refreshSubscribers = []
 }
 
-function addRefreshSubscriber(callback: (token: string) => void) {
+const addRefreshSubscriber = (callback: (token: string) => void) => {
 	refreshSubscribers.push(callback)
 }
 
 apiClient.interceptors.response.use(
 	response => response,
-	async error => {
-		const originalRequest = error.config
+	async (error: AxiosError) => {
+		const originalRequest = error.config as CustomAxiosRequestConfig
 
-		if (error.response?.status === 401 && !originalRequest._retry) {
+		if (
+			error.response?.status === 401 &&
+			originalRequest &&
+			!originalRequest._retry
+		) {
+			if (originalRequest.url?.includes('/auth/')) {
+				return Promise.reject(error)
+			}
+
 			originalRequest._retry = true
 
 			if (isRefreshing) {
@@ -55,13 +86,23 @@ apiClient.interceptors.response.use(
 
 			try {
 				const response = await axios.post(
-					`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4200'}/api/auth/login/access-token`,
+					`${apiClient.defaults.baseURL}/api/auth/login/access-token`,
 					{},
-					{ withCredentials: true }
+					{
+						withCredentials: true,
+						headers: {
+							'Content-Type': 'application/json'
+						}
+					}
 				)
 
 				const { accessToken } = response.data
-				localStorage.setItem('accessToken', accessToken)
+
+				if (!accessToken) {
+					throw new Error('No access token in response')
+				}
+
+				setAccessToken(accessToken)
 
 				apiClient.defaults.headers.common.Authorization = `Bearer ${accessToken}`
 				originalRequest.headers.Authorization = `Bearer ${accessToken}`
@@ -72,8 +113,13 @@ apiClient.interceptors.response.use(
 				return apiClient(originalRequest)
 			} catch (refreshError) {
 				isRefreshing = false
-				localStorage.removeItem('accessToken')
-				window.location.href = '/login'
+				refreshSubscribers = []
+				removeAccessToken()
+
+				if (typeof window !== 'undefined') {
+					window.location.replace('/login')
+				}
+
 				return Promise.reject(refreshError)
 			}
 		}

@@ -5,8 +5,7 @@ export {
 	authResponseSchema,
 	authSchema,
 	registerResponseSchema,
-	resendVerificationSchema,
-	userSchema
+	resendVerificationSchema
 } from './lib/authSchemas'
 export type {
 	AuthResponse,
@@ -15,5 +14,5 @@ export type {
 	ResendVerificationInput,
 	User
 } from './lib/authSchemas'
-export { VerifyEmailForm } from './ui/VerifyEmailForm'
+export { VerifyEmailForm } from './ui/VerifyEmailForm/VerifyEmailForm'
 export { AuthForm } from './ui/AuthForm/AuthForm'

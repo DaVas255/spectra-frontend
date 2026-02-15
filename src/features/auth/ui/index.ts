@@ -1,2 +1,2 @@
-export { VerifyEmailForm } from './VerifyEmailForm'
+export { VerifyEmailForm } from './VerifyEmailForm/VerifyEmailForm'
 export { AuthForm } from './AuthForm/AuthForm'

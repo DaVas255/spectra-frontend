@@ -3,10 +3,11 @@
 import Link from 'next/link'
 
 import styles from './Header.module.scss'
-import { useAuth } from '@/features/auth'
+import { useAppSelector } from '@/core/store'
+import { User, UserMenu } from '@/entities/user'
 
 export function Header() {
-	const { user, isAuthenticated, logout } = useAuth()
+	const user = useAppSelector((state): User | null => state.auth.user)
 
 	return (
 		<header className={styles.header}>
@@ -18,19 +19,7 @@ export function Header() {
 					Spectra
 				</Link>
 
-				<nav className={styles.nav}>
-					{isAuthenticated && (
-						<div className={styles.userSection}>
-							<span className={styles.userEmail}>{user?.email}</span>
-							<button
-								onClick={logout}
-								className={styles.logoutButton}
-							>
-								Выйти
-							</button>
-						</div>
-					)}
-				</nav>
+				<nav className={styles.nav}>{user && <UserMenu />}</nav>
 			</div>
 		</header>
 	)

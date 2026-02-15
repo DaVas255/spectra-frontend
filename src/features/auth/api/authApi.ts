@@ -4,9 +4,8 @@ import {
 	userSchema
 } from '@/features/auth'
 import type {
+	AuthInput,
 	AuthResponse,
-	LoginInput,
-	RegisterInput,
 	RegisterResponse,
 	ResendVerificationInput,
 	User
@@ -14,19 +13,14 @@ import type {
 import { apiClient } from '@/shared/api'
 
 export const authApi = {
-	login: async (data: LoginInput): Promise<AuthResponse> => {
+	login: async (data: AuthInput): Promise<AuthResponse> => {
 		const response = await apiClient.post('/auth/login', data)
 		return authResponseSchema.parse(response.data)
 	},
 
-	register: async (data: RegisterInput): Promise<RegisterResponse> => {
+	register: async (data: AuthInput): Promise<RegisterResponse> => {
 		const response = await apiClient.post('/auth/register', data)
 		return registerResponseSchema.parse(response.data)
-	},
-
-	logout: async (): Promise<boolean> => {
-		const response = await apiClient.post('/auth/logout')
-		return response.data
 	},
 
 	refreshToken: async (): Promise<AuthResponse> => {
@@ -34,13 +28,8 @@ export const authApi = {
 		return authResponseSchema.parse(response.data)
 	},
 
-	getProfile: async (): Promise<User> => {
-		const response = await apiClient.get('/auth/profile')
-		return userSchema.parse(response.data)
-	},
-
 	verifyEmail: async (token: string): Promise<{ message: string }> => {
-		const response = await apiClient.get(`/auth/verify-email/${token}`)
+		const response = await apiClient.post('/auth/verify-email', { token })
 		return response.data
 	},
 

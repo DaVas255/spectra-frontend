@@ -5,16 +5,28 @@ import { Spin } from 'antd'
 import { AuthFormFooter } from '../AuthFormFooter'
 import { AuthFormHeader } from '../AuthFormHeader'
 
-import styles from './Auth.module.scss'
+import styles from './AuthForm.module.scss'
 import { useAuthForm } from '@/features/auth'
 
 export const AuthForm = ({ isLogin }: { isLogin: boolean }) => {
-	const { handleSubmit, isAuthFormLoading, onSubmit, register, errors } =
-		useAuthForm(isLogin)
+	const {
+		handleSubmit,
+		isAuthFormLoading,
+		onSubmit,
+		register,
+		errors,
+		apiError
+	} = useAuthForm(isLogin)
 
 	return (
 		<div className={styles.authCard}>
 			<AuthFormHeader isLogin={isLogin} />
+
+			{apiError && (
+				<div className={styles.errorAlert}>
+					<p className={styles.errorAlertText}>{apiError}</p>
+				</div>
+			)}
 
 			<form
 				className={styles.form}

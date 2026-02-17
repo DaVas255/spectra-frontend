@@ -21,8 +21,7 @@ export const useUser = () => {
 	const { data: profile, isLoading: isProfileLoading } = useQuery({
 		queryKey: USER_KEYS.profile,
 		queryFn: userApi.getProfile,
-		enabled: !!user,
-		staleTime: 5 * 60 * 1000 // 5 minutes
+		enabled: !!user
 	})
 
 	const { mutate: logout, isPending: isLogoutLoading } = useMutation({

@@ -11,8 +11,7 @@ export default function Loading() {
 				top: 0,
 				left: 0,
 				right: 0,
-				bottom: 0,
-				backgroundColor: '#f9fafb'
+				bottom: 0
 			}}
 		>
 			<Spin

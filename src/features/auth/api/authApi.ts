@@ -1,8 +1,4 @@
-import {
-	authResponseSchema,
-	registerResponseSchema,
-	userSchema
-} from '@/features/auth'
+import { authResponseSchema, registerResponseSchema } from '@/features/auth'
 import type {
 	AuthInput,
 	AuthResponse,

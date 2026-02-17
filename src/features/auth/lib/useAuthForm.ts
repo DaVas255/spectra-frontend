@@ -2,6 +2,8 @@
 
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
+import { message } from 'antd'
+import { AxiosError } from 'axios'
 import { useRouter } from 'next/navigation'
 import { useTransition } from 'react'
 import { SubmitHandler, useForm } from 'react-hook-form'
@@ -40,7 +42,13 @@ export const useAuthForm = (isLogin: boolean) => {
 				router.push('/')
 			})
 		},
-		onError(error) {}
+		onError(error: any) {
+			if (error.response?.status === 403 && error.response?.data?.email) {
+				const email = error.response.data.email
+				message.warning('Пожалуйста, подтвердите ваш email')
+				router.push(`/verify-email?email=${encodeURIComponent(email)}`)
+			}
+		}
 	})
 
 	const { mutate: mutateRegister, isPending: isRegisterPending } = useMutation({

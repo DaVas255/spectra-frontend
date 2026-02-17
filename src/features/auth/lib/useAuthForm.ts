@@ -1,11 +1,12 @@
 'use client'
 
+'use client'
+
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { message } from 'antd'
-import { AxiosError } from 'axios'
 import { useRouter } from 'next/navigation'
-import { useTransition } from 'react'
+import { useState, useTransition } from 'react'
 import { SubmitHandler, useForm } from 'react-hook-form'
 
 import { useAppDispatch, useAppSelector } from '@/core/store'
@@ -28,6 +29,7 @@ export const useAuthForm = (isLogin: boolean) => {
 	const router = useRouter()
 	const [isPending, startTransition] = useTransition()
 	const queryClient = useQueryClient()
+	const [apiError, setApiError] = useState<string | null>(null)
 
 	const { user, isAuthenticated } = useAppSelector(state => state.auth)
 
@@ -35,6 +37,7 @@ export const useAuthForm = (isLogin: boolean) => {
 		mutationKey: ['login'],
 		mutationFn: authApi.login,
 		onSuccess(data) {
+			setApiError(null)
 			startTransition(() => {
 				localStorage.setItem('accessToken', data.accessToken)
 				queryClient.setQueryData(AUTH_KEYS.user, data.user)
@@ -43,10 +46,21 @@ export const useAuthForm = (isLogin: boolean) => {
 			})
 		},
 		onError(error: any) {
+			setApiError(null)
+
 			if (error.response?.status === 403 && error.response?.data?.email) {
 				const email = error.response.data.email
 				message.warning('Пожалуйста, подтвердите ваш email')
 				router.push(`/verify-email?email=${encodeURIComponent(email)}`)
+				return
+			}
+
+			if (error.response?.data?.message) {
+				setApiError(error.response.data.message)
+			} else if (error.message) {
+				setApiError(error.message)
+			} else {
+				setApiError('Произошла ошибка. Попробуйте позже.')
 			}
 		}
 	})
@@ -55,16 +69,26 @@ export const useAuthForm = (isLogin: boolean) => {
 		mutationKey: ['register'],
 		mutationFn: authApi.register,
 		onSuccess: (_, variables) => {
+			setApiError(null)
 			startTransition(() => {
 				router.push(
 					`/verify-email?email=${encodeURIComponent(variables.email)}`
 				)
 			})
 		},
-		onError(error) {}
+		onError(error: any) {
+			if (error.response?.data?.message) {
+				setApiError(error.response.data.message)
+			} else if (error.message) {
+				setApiError(error.message)
+			} else {
+				setApiError('Произошла ошибка при регистрации.')
+			}
+		}
 	})
 
 	const onSubmit: SubmitHandler<AuthInput> = data => {
+		setApiError(null)
 		isLogin ? mutateLogin(data) : mutateRegister(data)
 	}
 
@@ -75,6 +99,7 @@ export const useAuthForm = (isLogin: boolean) => {
 		handleSubmit,
 		errors,
 		onSubmit,
+		apiError,
 		user,
 		isAuthenticated,
 		isAuthFormLoading

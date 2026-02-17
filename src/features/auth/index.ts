@@ -1,6 +1,7 @@
 export { authApi } from './api/authApi'
 export { authReducer, clearUser, setUser } from './model/authSlice'
 export { useAuthForm } from './lib/useAuthForm'
+export { useVerifyEmail } from './lib/useVerifyEmail'
 export {
 	authResponseSchema,
 	authSchema,

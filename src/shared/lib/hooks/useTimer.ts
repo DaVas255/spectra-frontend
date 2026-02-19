@@ -1,3 +1,5 @@
+'use client'
+
 import { useEffect, useRef, useState } from 'react'
 
 interface UseTimerOptions {
@@ -6,7 +8,11 @@ interface UseTimerOptions {
 	autoStart?: boolean
 }
 
-export const useTimer = ({ seconds, onComplete, autoStart = false }: UseTimerOptions) => {
+export const useTimer = ({
+	seconds,
+	onComplete,
+	autoStart = false
+}: UseTimerOptions) => {
 	const [timeLeft, setTimeLeft] = useState(autoStart ? seconds : 0)
 	const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null)
 

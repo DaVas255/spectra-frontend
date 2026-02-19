@@ -1,5 +1,8 @@
 import axios, { AxiosError, InternalAxiosRequestConfig } from 'axios'
 
+import { IS_CLIENT } from '../constants'
+import { tokenService } from '../lib'
+
 interface CustomAxiosRequestConfig extends InternalAxiosRequestConfig {
 	_retry?: boolean
 }
@@ -13,28 +16,10 @@ export const apiClient = axios.create({
 	withCredentials: true
 })
 
-const getAccessToken = (): string | null => {
-	if (typeof window !== 'undefined') {
-		return localStorage.getItem('accessToken')
-	}
-	return null
-}
-
-const setAccessToken = (token: string): void => {
-	if (typeof window !== 'undefined') {
-		localStorage.setItem('accessToken', token)
-	}
-}
-
-const removeAccessToken = (): void => {
-	if (typeof window !== 'undefined') {
-		localStorage.removeItem('accessToken')
-	}
-}
-
 apiClient.interceptors.request.use(
 	(config: CustomAxiosRequestConfig) => {
-		const token = getAccessToken()
+		const token = tokenService.getAccessToken()
+
 		if (token) {
 			config.headers.Authorization = `Bearer ${token}`
 		}
@@ -102,7 +87,7 @@ apiClient.interceptors.response.use(
 					throw new Error('No access token in response')
 				}
 
-				setAccessToken(accessToken)
+				tokenService.setAccessToken(accessToken)
 
 				apiClient.defaults.headers.common.Authorization = `Bearer ${accessToken}`
 				originalRequest.headers.Authorization = `Bearer ${accessToken}`
@@ -114,9 +99,9 @@ apiClient.interceptors.response.use(
 			} catch (refreshError) {
 				isRefreshing = false
 				refreshSubscribers = []
-				removeAccessToken()
+				tokenService.removeAccessToken()
 
-				if (typeof window !== 'undefined') {
+				if (IS_CLIENT) {
 					window.location.replace('/login')
 				}
 

@@ -6,3 +6,4 @@ export {
 	secondsToMs
 } from './utils/time'
 export { tokenService } from './utils/token'
+export { formatApiError, isTechnicalError } from './utils/error'

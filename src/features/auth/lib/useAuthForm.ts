@@ -11,6 +11,7 @@ import { SubmitHandler, useForm } from 'react-hook-form'
 
 import { useAppDispatch, useAppSelector } from '@/core/store'
 import { AuthInput, authApi, authSchema, setUser } from '@/features/auth'
+import { formatApiError } from '@/shared/lib/utils/error'
 
 const AUTH_KEYS = {
 	user: ['auth', 'user'] as const,
@@ -55,13 +56,7 @@ export const useAuthForm = (isLogin: boolean) => {
 				return
 			}
 
-			if (error.response?.data?.message) {
-				setApiError(error.response.data.message)
-			} else if (error.message) {
-				setApiError(error.message)
-			} else {
-				setApiError('Произошла ошибка. Попробуйте позже.')
-			}
+			setApiError(formatApiError(error))
 		}
 	})
 
@@ -77,13 +72,7 @@ export const useAuthForm = (isLogin: boolean) => {
 			})
 		},
 		onError(error: any) {
-			if (error.response?.data?.message) {
-				setApiError(error.response.data.message)
-			} else if (error.message) {
-				setApiError(error.message)
-			} else {
-				setApiError('Произошла ошибка при регистрации.')
-			}
+			setApiError(formatApiError(error))
 		}
 	})
 

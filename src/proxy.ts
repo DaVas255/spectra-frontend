@@ -1,14 +1,27 @@
+import { jwtVerify } from 'jose'
 import { NextResponse } from 'next/server'
 import type { NextRequest } from 'next/server'
 
 const publicRoutes = ['/login', '/register', '/verify-email']
 const authRoutes = ['/login', '/register']
+const JWT_SECRET = new TextEncoder().encode(process.env.JWT_SECRET)
 
-export function proxy(request: NextRequest) {
+async function isValidRefreshToken(token: string): Promise<boolean> {
+	try {
+		await jwtVerify(token, JWT_SECRET)
+		return true
+	} catch {
+		return false
+	}
+}
+
+export async function proxy(request: NextRequest) {
 	const { pathname } = request.nextUrl
-	const hasRefreshToken = request.cookies.has('refreshToken')
+	const refreshToken = request.cookies.get('refreshToken')?.value
 
-	if (hasRefreshToken && authRoutes.some(route => pathname.startsWith(route))) {
+	const isValid = refreshToken ? await isValidRefreshToken(refreshToken) : false
+
+	if (isValid && authRoutes.some(route => pathname.startsWith(route))) {
 		return NextResponse.redirect(new URL('/', request.url))
 	}
 
@@ -16,7 +29,7 @@ export function proxy(request: NextRequest) {
 		return NextResponse.next()
 	}
 
-	if (!hasRefreshToken) {
+	if (!isValid) {
 		return NextResponse.redirect(new URL('/login', request.url))
 	}
 

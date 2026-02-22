@@ -8,7 +8,8 @@ import { useState, useTransition } from 'react'
 import { SubmitHandler, useForm } from 'react-hook-form'
 
 import { useAppDispatch, useAppSelector } from '@/core/store'
-import { AuthInput, authApi, authSchema, setUser } from '@/features/auth'
+import { setUser } from '@/entities/user'
+import { AuthInput, authApi, authSchema } from '@/features/auth'
 import { formatApiError, tokenService } from '@/shared/lib'
 
 export const useAuthForm = (isLogin: boolean) => {
@@ -24,7 +25,7 @@ export const useAuthForm = (isLogin: boolean) => {
 	const [isPending, startTransition] = useTransition()
 	const [apiError, setApiError] = useState<string | null>(null)
 
-	const { user } = useAppSelector(state => state.auth)
+	const { user } = useAppSelector(state => state.user)
 
 	const { mutate: mutateLogin, isPending: isLoginPending } = useMutation({
 		mutationKey: ['login'],

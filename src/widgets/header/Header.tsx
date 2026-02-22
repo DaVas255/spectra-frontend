@@ -7,7 +7,7 @@ import { useAppSelector } from '@/core/store'
 import { User, UserMenu } from '@/entities/user'
 
 export function Header() {
-	const user = useAppSelector((state): User | null => state.auth.user)
+	const user = useAppSelector((state): User | null => state.user.user)
 
 	return (
 		<header className={styles.header}>

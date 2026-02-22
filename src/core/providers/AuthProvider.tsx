@@ -4,7 +4,8 @@ import { usePathname } from 'next/navigation'
 import { useEffect } from 'react'
 
 import { useAppDispatch } from '@/core/store'
-import { authApi, clearUser, setUser } from '@/features/auth'
+import { clearUser, setUser } from '@/entities/user'
+import { authApi } from '@/features/auth'
 import { PUBLIC_ROUTES } from '@/shared/constants'
 import { tokenService } from '@/shared/lib'
 

@@ -4,14 +4,16 @@ import { DownOutlined, LogoutOutlined, UserOutlined } from '@ant-design/icons'
 import { Avatar, Button, Dropdown, Space, Typography } from 'antd'
 
 import styles from './UserMenu.module.scss'
-import { useUser } from '@/entities/user/lib/useUser'
+import { useAppSelector } from '@/core/store'
+import { User, useUser } from '@/entities/user'
 
 const { Text } = Typography
 
 export const UserMenu = () => {
-	const { profile, logout, isLogoutLoading } = useUser()
+	const { logout, isLogoutLoading } = useUser()
+	const user = useAppSelector((state): User | null => state.user.user)
 
-	if (!profile) {
+	if (!user) {
 		return null
 	}
 
@@ -44,7 +46,7 @@ export const UserMenu = () => {
 					icon={<UserOutlined />}
 					className={styles.avatar}
 				/>
-				<Text className={styles.email}>{profile.email}</Text>
+				<Text className={styles.email}>{user.email}</Text>
 				<DownOutlined className={styles.arrow} />
 			</Space>
 		</Dropdown>

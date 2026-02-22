@@ -23,6 +23,5 @@ export const registerResponseSchema = z.object({
 
 export type AuthInput = z.infer<typeof authSchema>
 export type ResendVerificationInput = z.infer<typeof resendVerificationSchema>
-export type User = z.infer<typeof userSchema>
 export type AuthResponse = z.infer<typeof authResponseSchema>
 export type RegisterResponse = z.infer<typeof registerResponseSchema>

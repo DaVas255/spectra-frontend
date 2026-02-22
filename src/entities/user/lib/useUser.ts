@@ -15,7 +15,6 @@ const USER_KEYS = {
 export const useUser = () => {
 	const dispatch = useAppDispatch()
 	const router = useRouter()
-	const queryClient = useQueryClient()
 	const user = useAppSelector((state): User | null => state.auth.user)
 
 	const { data: profile, isLoading: isProfileLoading } = useQuery({
@@ -27,15 +26,12 @@ export const useUser = () => {
 	const { mutate: logout, isPending: isLogoutLoading } = useMutation({
 		mutationFn: userApi.logout,
 		onSuccess: () => {
-			localStorage.removeItem('accessToken')
-			queryClient.clear()
 			dispatch(clearUser())
 			router.push('/login')
 		}
 	})
 
 	return {
-		user,
 		profile,
 		isProfileLoading,
 		logout,

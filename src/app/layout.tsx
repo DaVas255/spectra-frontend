@@ -4,7 +4,11 @@ import type { Metadata } from 'next'
 import { Inter } from 'next/font/google'
 import { Suspense } from 'react'
 
-import { ReactQueryProvider, StoreProvider } from '@/core/providers'
+import {
+	AuthProvider,
+	ReactQueryProvider,
+	StoreProvider
+} from '@/core/providers'
 import '@/core/styles/index.scss'
 import { Header } from '@/widgets/header'
 
@@ -25,9 +29,11 @@ const RootLayout = ({ children }: Readonly<{ children: React.ReactNode }>) => {
 				<ReactQueryProvider>
 					<StoreProvider>
 						<AntdRegistry>
-							<Header />
 							<Suspense fallback={<Spin size='large' />}>
-								<main className='main'>{children}</main>
+								<AuthProvider>
+									<Header />
+									<main className='main'>{children}</main>
+								</AuthProvider>
 							</Suspense>
 						</AntdRegistry>
 					</StoreProvider>

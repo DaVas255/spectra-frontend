@@ -9,9 +9,9 @@ import { useUser } from '@/entities/user/lib/useUser'
 const { Text } = Typography
 
 export const UserMenu = () => {
-	const { user, logout, isLogoutLoading } = useUser()
+	const { profile, logout, isLogoutLoading } = useUser()
 
-	if (!user) {
+	if (!profile) {
 		return null
 	}
 
@@ -44,7 +44,7 @@ export const UserMenu = () => {
 					icon={<UserOutlined />}
 					className={styles.avatar}
 				/>
-				<Text className={styles.email}>{user.email}</Text>
+				<Text className={styles.email}>{profile.email}</Text>
 				<DownOutlined className={styles.arrow} />
 			</Space>
 		</Dropdown>

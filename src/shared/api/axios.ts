@@ -52,10 +52,6 @@ apiClient.interceptors.response.use(
 			originalRequest &&
 			!originalRequest._retry
 		) {
-			if (originalRequest.url?.includes('/auth/')) {
-				return Promise.reject(error)
-			}
-
 			originalRequest._retry = true
 
 			if (isRefreshing) {
@@ -71,14 +67,9 @@ apiClient.interceptors.response.use(
 
 			try {
 				const response = await axios.post(
-					`${apiClient.defaults.baseURL}/api/auth/login/access-token`,
+					`${apiClient.defaults.baseURL}/auth/login/access-token`,
 					{},
-					{
-						withCredentials: true,
-						headers: {
-							'Content-Type': 'application/json'
-						}
-					}
+					{ withCredentials: true }
 				)
 
 				const { accessToken } = response.data
@@ -93,11 +84,8 @@ apiClient.interceptors.response.use(
 				originalRequest.headers.Authorization = `Bearer ${accessToken}`
 
 				onRefreshed(accessToken)
-				isRefreshing = false
-
 				return apiClient(originalRequest)
 			} catch (refreshError) {
-				isRefreshing = false
 				refreshSubscribers = []
 				tokenService.removeAccessToken()
 
@@ -106,6 +94,8 @@ apiClient.interceptors.response.use(
 				}
 
 				return Promise.reject(refreshError)
+			} finally {
+				isRefreshing = false
 			}
 		}
 

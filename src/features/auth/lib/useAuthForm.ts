@@ -1,9 +1,7 @@
 'use client'
 
-'use client'
-
 import { zodResolver } from '@hookform/resolvers/zod'
-import { useMutation, useQueryClient } from '@tanstack/react-query'
+import { useMutation } from '@tanstack/react-query'
 import { message } from 'antd'
 import { useRouter } from 'next/navigation'
 import { useState, useTransition } from 'react'
@@ -11,12 +9,7 @@ import { SubmitHandler, useForm } from 'react-hook-form'
 
 import { useAppDispatch, useAppSelector } from '@/core/store'
 import { AuthInput, authApi, authSchema, setUser } from '@/features/auth'
-import { formatApiError } from '@/shared/lib/utils/error'
-
-const AUTH_KEYS = {
-	user: ['auth', 'user'] as const,
-	profile: ['auth', 'profile'] as const
-}
+import { formatApiError, tokenService } from '@/shared/lib'
 
 export const useAuthForm = (isLogin: boolean) => {
 	const {
@@ -29,10 +22,9 @@ export const useAuthForm = (isLogin: boolean) => {
 	const dispatch = useAppDispatch()
 	const router = useRouter()
 	const [isPending, startTransition] = useTransition()
-	const queryClient = useQueryClient()
 	const [apiError, setApiError] = useState<string | null>(null)
 
-	const { user, isAuthenticated } = useAppSelector(state => state.auth)
+	const { user } = useAppSelector(state => state.auth)
 
 	const { mutate: mutateLogin, isPending: isLoginPending } = useMutation({
 		mutationKey: ['login'],
@@ -40,8 +32,7 @@ export const useAuthForm = (isLogin: boolean) => {
 		onSuccess(data) {
 			setApiError(null)
 			startTransition(() => {
-				localStorage.setItem('accessToken', data.accessToken)
-				queryClient.setQueryData(AUTH_KEYS.user, data.user)
+				tokenService.setAccessToken(data.accessToken)
 				dispatch(setUser(data.user))
 				router.push('/')
 			})
@@ -90,7 +81,6 @@ export const useAuthForm = (isLogin: boolean) => {
 		onSubmit,
 		apiError,
 		user,
-		isAuthenticated,
 		isAuthFormLoading
 	}
 }

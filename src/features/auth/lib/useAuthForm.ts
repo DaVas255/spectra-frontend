@@ -2,15 +2,23 @@
 
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useMutation } from '@tanstack/react-query'
+import { AxiosError } from 'axios'
 import { message } from 'antd'
 import { useRouter } from 'next/navigation'
 import { useState, useTransition } from 'react'
 import { SubmitHandler, useForm } from 'react-hook-form'
 
+import { authApi } from '../api/authApi'
+
+import { AuthInput, authSchema } from './authSchemas'
 import { useAppDispatch, useAppSelector } from '@/core/store'
 import { setUser } from '@/entities/user'
-import { AuthInput, authApi, authSchema } from '@/features/auth'
 import { formatApiError, tokenService } from '@/shared/lib'
+
+interface AuthErrorResponse {
+	email?: string
+	message?: string
+}
 
 export const useAuthForm = (isLogin: boolean) => {
 	const {
@@ -38,7 +46,7 @@ export const useAuthForm = (isLogin: boolean) => {
 				router.push('/')
 			})
 		},
-		onError(error: any) {
+		onError(error: AxiosError<AuthErrorResponse>) {
 			setApiError(null)
 
 			if (error.response?.status === 403 && error.response?.data?.email) {
@@ -63,7 +71,7 @@ export const useAuthForm = (isLogin: boolean) => {
 				)
 			})
 		},
-		onError(error: any) {
+		onError(error: AxiosError<AuthErrorResponse>) {
 			setApiError(formatApiError(error))
 		}
 	})

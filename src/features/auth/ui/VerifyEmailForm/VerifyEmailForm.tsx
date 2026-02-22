@@ -9,8 +9,9 @@ import {
 import { Button, Card, Spin, Typography } from 'antd'
 import Link from 'next/link'
 
+import { useVerifyEmail } from '../../lib/useVerifyEmail'
+
 import styles from './VerifyEmailForm.module.scss'
-import { useVerifyEmail } from '@/features/auth'
 
 const { Title, Text, Paragraph } = Typography
 

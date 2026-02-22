@@ -1,6 +1,6 @@
 'use client'
 
-import { HomeOutlined, ReloadOutlined } from '@ant-design/icons'
+import { HomeOutlined } from '@ant-design/icons'
 import { Button, Result, Typography } from 'antd'
 import Link from 'next/link'
 import { useEffect } from 'react'
@@ -8,8 +8,7 @@ import { useEffect } from 'react'
 const { Text } = Typography
 
 export default function Error({
-	error,
-	reset
+	error
 }: {
 	error: Error & { digest?: string }
 	reset: () => void

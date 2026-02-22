@@ -1,6 +1,7 @@
 'use client'
 
 import { useMutation } from '@tanstack/react-query'
+import { AxiosError } from 'axios'
 import { message } from 'antd'
 import { useRouter, useSearchParams } from 'next/navigation'
 import { useEffect, useState } from 'react'
@@ -12,6 +13,10 @@ import { formatTime, useTimer } from '@/shared/lib'
 const RESEND_COOLDOWN = 60
 
 export type VerificationStatus = 'idle' | 'loading' | 'success' | 'error'
+
+interface VerifyEmailErrorResponse {
+	message?: string
+}
 
 export const useVerifyEmail = () => {
 	const router = useRouter()
@@ -43,7 +48,7 @@ export const useVerifyEmail = () => {
 				router.push('/')
 			}, 2000)
 		},
-		onError: (err: any) => {
+		onError: (err: AxiosError<VerifyEmailErrorResponse>) => {
 			setStatus('error')
 			setError(err.message || 'Ошибка подтверждения email')
 		}
@@ -56,7 +61,7 @@ export const useVerifyEmail = () => {
 			resetTimer()
 			startTimer()
 		},
-		onError: (err: any) => {
+		onError: (err: AxiosError<VerifyEmailErrorResponse>) => {
 			message.error(err.message || 'Ошибка отправки письма')
 		}
 	})

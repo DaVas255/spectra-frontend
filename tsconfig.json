@@ -22,8 +22,7 @@
 		"paths": {
 			"@/*": ["./src/*"],
 			"@/app/*": ["./src/app/*"],
-			"@/application/*": ["./src/application/*"],
-			"@/processes/*": ["./src/processes/*"],
+			"@/core/*": ["./src/core/*"],
 			"@/widgets/*": ["./src/widgets/*"],
 			"@/features/*": ["./src/features/*"],
 			"@/entities/*": ["./src/entities/*"],

@@ -3,8 +3,7 @@ import type {
 	AuthInput,
 	AuthResponse,
 	RegisterResponse,
-	ResendVerificationInput,
-	User
+	ResendVerificationInput
 } from '@/features/auth'
 import { apiClient } from '@/shared/api'
 

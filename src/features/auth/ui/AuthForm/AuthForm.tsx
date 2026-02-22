@@ -2,11 +2,11 @@
 
 import { Spin } from 'antd'
 
+import { useAuthForm } from '../../lib/useAuthForm'
 import { AuthFormFooter } from '../AuthFormFooter'
 import { AuthFormHeader } from '../AuthFormHeader'
 
 import styles from './AuthForm.module.scss'
-import { useAuthForm } from '@/features/auth'
 
 export const AuthForm = ({ isLogin }: { isLogin: boolean }) => {
 	const {

@@ -33,7 +33,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 		}
 
 		init()
-	}, [])
+	}, [isPublicRoute])
 
 	return children
 }

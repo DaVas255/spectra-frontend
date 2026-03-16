@@ -2,8 +2,8 @@
 
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useMutation } from '@tanstack/react-query'
-import { AxiosError } from 'axios'
 import { message } from 'antd'
+import { AxiosError } from 'axios'
 import { useRouter } from 'next/navigation'
 import { useState, useTransition } from 'react'
 import { SubmitHandler, useForm } from 'react-hook-form'
@@ -13,7 +13,7 @@ import { authApi } from '../api/authApi'
 import { AuthInput, authSchema } from './authSchemas'
 import { useAppDispatch, useAppSelector } from '@/core/store'
 import { setUser } from '@/entities/user'
-import { formatApiError, tokenService } from '@/shared/lib'
+import { tokenService } from '@/shared/lib'
 
 interface AuthErrorResponse {
 	email?: string
@@ -31,7 +31,6 @@ export const useAuthForm = (isLogin: boolean) => {
 	const dispatch = useAppDispatch()
 	const router = useRouter()
 	const [isPending, startTransition] = useTransition()
-	const [apiError, setApiError] = useState<string | null>(null)
 
 	const { user } = useAppSelector(state => state.user)
 
@@ -39,7 +38,6 @@ export const useAuthForm = (isLogin: boolean) => {
 		mutationKey: ['login'],
 		mutationFn: authApi.login,
 		onSuccess(data) {
-			setApiError(null)
 			startTransition(() => {
 				tokenService.setAccessToken(data.accessToken)
 				dispatch(setUser(data.user))
@@ -47,8 +45,6 @@ export const useAuthForm = (isLogin: boolean) => {
 			})
 		},
 		onError(error: AxiosError<AuthErrorResponse>) {
-			setApiError(null)
-
 			if (error.response?.status === 403 && error.response?.data?.email) {
 				const email = error.response.data.email
 				message.warning('Пожалуйста, подтвердите ваш email')
@@ -56,7 +52,7 @@ export const useAuthForm = (isLogin: boolean) => {
 				return
 			}
 
-			setApiError(formatApiError(error))
+			message.error(error.response?.data.message || 'Ошибка авторизации')
 		}
 	})
 
@@ -64,7 +60,6 @@ export const useAuthForm = (isLogin: boolean) => {
 		mutationKey: ['register'],
 		mutationFn: authApi.register,
 		onSuccess: (_, variables) => {
-			setApiError(null)
 			startTransition(() => {
 				router.push(
 					`/verify-email?email=${encodeURIComponent(variables.email)}`
@@ -72,12 +67,11 @@ export const useAuthForm = (isLogin: boolean) => {
 			})
 		},
 		onError(error: AxiosError<AuthErrorResponse>) {
-			setApiError(formatApiError(error))
+			message.error(error.response?.data.message || 'Ошибка регистрации')
 		}
 	})
 
 	const onSubmit: SubmitHandler<AuthInput> = data => {
-		setApiError(null)
 		isLogin ? mutateLogin(data) : mutateRegister(data)
 	}
 
@@ -88,7 +82,6 @@ export const useAuthForm = (isLogin: boolean) => {
 		handleSubmit,
 		errors,
 		onSubmit,
-		apiError,
 		user,
 		isAuthFormLoading
 	}

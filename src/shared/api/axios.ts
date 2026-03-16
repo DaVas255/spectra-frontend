@@ -50,7 +50,9 @@ apiClient.interceptors.response.use(
 		if (
 			error.response?.status === 401 &&
 			originalRequest &&
-			!originalRequest._retry
+			!originalRequest._retry &&
+			!originalRequest.url?.includes('/auth/login') &&
+			!originalRequest.url?.includes('/auth/register')
 		) {
 			originalRequest._retry = true
 

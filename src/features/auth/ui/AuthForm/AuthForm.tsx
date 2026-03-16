@@ -9,24 +9,12 @@ import { AuthFormHeader } from '../AuthFormHeader'
 import styles from './AuthForm.module.scss'
 
 export const AuthForm = ({ isLogin }: { isLogin: boolean }) => {
-	const {
-		handleSubmit,
-		isAuthFormLoading,
-		onSubmit,
-		register,
-		errors,
-		apiError
-	} = useAuthForm(isLogin)
+	const { handleSubmit, isAuthFormLoading, onSubmit, register, errors } =
+		useAuthForm(isLogin)
 
 	return (
 		<div className={styles.authCard}>
 			<AuthFormHeader isLogin={isLogin} />
-
-			{apiError && (
-				<div className={styles.errorAlert}>
-					<p className={styles.errorAlertText}>{apiError}</p>
-				</div>
-			)}
 
 			<form
 				className={styles.form}

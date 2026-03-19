@@ -1,2 +1,2 @@
 export { signInApi } from './api/signInApi'
-export { SignInForm } from './ui/SignInForm/SignInForm'
+export { SignInForm } from './ui/sign-in-form/SignInForm'

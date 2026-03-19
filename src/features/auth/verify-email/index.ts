@@ -1,1 +1,1 @@
-export { VerifyEmailForm } from './ui/VerifyEmailForm/VerifyEmailForm'
+export { VerifyEmailForm } from './ui/verify-email-form/VerifyEmailForm'

@@ -1,1 +1,1 @@
-export { LogoutMenu } from './ui/LogoutMenu/LogoutMenu'
+export { LogoutMenu } from './ui/logout-menu/LogoutMenu'

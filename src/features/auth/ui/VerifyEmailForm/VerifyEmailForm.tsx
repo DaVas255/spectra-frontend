@@ -6,12 +6,15 @@ import {
 	MailOutlined,
 	ReloadOutlined
 } from '@ant-design/icons'
-import { Button, Card, Spin, Typography } from 'antd'
+import { Button, Card, Typography } from 'antd'
 import Link from 'next/link'
 
 import { useVerifyEmail } from '../../lib/useVerifyEmail'
 
+import { VerifyEmailError } from './VerifyEmailError'
 import styles from './VerifyEmailForm.module.scss'
+import { VerifyEmailLoading } from './VerifyEmailLoading'
+import { VerifyEmailSuccess } from './VerifyEmailSuccess'
 
 const { Title, Text, Paragraph } = Typography
 
@@ -27,81 +30,21 @@ export const VerifyEmailForm = () => {
 		handleResend
 	} = useVerifyEmail()
 
-	if (status === 'loading' || isVerifying) {
-		return (
-			<Card className={styles.card}>
-				<div className={styles.loadingContainer}>
-					<Spin size='large' />
-					<Text>Подтверждение email...</Text>
-				</div>
-			</Card>
-		)
-	}
+	if (status === 'loading' || isVerifying) return <VerifyEmailLoading />
 
-	if (status === 'success') {
-		return (
-			<Card className={styles.card}>
-				<div className={styles.container}>
-					<div className={styles.iconContainer}>
-						<CheckCircleOutlined
-							className={`${styles.icon} ${styles.successIcon}`}
-						/>
-					</div>
-					<Title
-						level={3}
-						className={styles.title}
-					>
-						Email подтвержден!
-					</Title>
-					<Paragraph className={styles.description}>
-						Ваш email успешно подтвержден. Сейчас вы будете перенаправлены на
-						главную страницу.
-					</Paragraph>
-					<Link href='/'>
-						<Button type='primary'>На главную</Button>
-					</Link>
-				</div>
-			</Card>
-		)
-	}
+	if (status === 'success') return <VerifyEmailSuccess />
 
-	if (status === 'error') {
+	if (status === 'error')
 		return (
-			<Card className={styles.card}>
-				<div className={styles.container}>
-					<div className={styles.iconContainer}>
-						<CloseCircleOutlined
-							className={`${styles.icon} ${styles.errorIcon}`}
-						/>
-					</div>
-					<Title
-						level={3}
-						className={styles.title}
-					>
-						Ошибка подтверждения
-					</Title>
-					<Paragraph className={styles.description}>{error}</Paragraph>
-					{email && (
-						<Button
-							type='primary'
-							onClick={handleResend}
-							loading={isResending}
-							disabled={isTimerRunning}
-							icon={<ReloadOutlined />}
-							style={{ marginBottom: 16 }}
-						>
-							{isTimerRunning
-								? `Подождите ${timeLeft}`
-								: 'Отправить письмо повторно'}
-						</Button>
-					)}
-					<Link href='/'>
-						<Button type='link'>На главную</Button>
-					</Link>
-				</div>
-			</Card>
+			<VerifyEmailError
+				email={email}
+				error={error}
+				handleResend={handleResend}
+				isResending={isResending}
+				isTimerRunning={isTimerRunning}
+				timeLeft={timeLeft}
+			/>
 		)
-	}
 
 	return (
 		<Card className={styles.card}>

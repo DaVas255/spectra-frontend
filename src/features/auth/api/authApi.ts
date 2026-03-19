@@ -1,10 +1,11 @@
-import { authResponseSchema, registerResponseSchema } from '@/features/auth'
+import { authResponseSchema, registerResponseSchema } from '../lib/authSchemas'
 import type {
 	AuthInput,
 	AuthResponse,
 	RegisterResponse,
 	ResendVerificationInput
-} from '@/features/auth'
+} from '../lib/authSchemas'
+
 import { apiClient } from '@/shared/api'
 
 export const authApi = {

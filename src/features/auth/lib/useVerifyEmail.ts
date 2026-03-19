@@ -1,8 +1,8 @@
 'use client'
 
 import { useMutation } from '@tanstack/react-query'
-import { AxiosError } from 'axios'
 import { message } from 'antd'
+import { AxiosError } from 'axios'
 import { useRouter, useSearchParams } from 'next/navigation'
 import { useEffect, useState } from 'react'
 
@@ -62,7 +62,7 @@ export const useVerifyEmail = () => {
 			startTimer()
 		},
 		onError: (err: AxiosError<VerifyEmailErrorResponse>) => {
-			message.error(err.message || 'Ошибка отправки письма')
+			message.error(err.response?.data?.message || 'Ошибка отправки письма')
 		}
 	})
 
@@ -77,7 +77,7 @@ export const useVerifyEmail = () => {
 			setStatus('loading')
 			verifyMutation.mutate(token)
 		}
-	}, [token, status])
+	}, [token, status, verifyMutation])
 
 	const handleResend = () => {
 		if (!email || isRunning || resendMutation.isPending) return

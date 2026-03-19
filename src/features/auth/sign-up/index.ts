@@ -1,5 +1,1 @@
-export { signUpApi } from './api/signUpApi'
-export { useSignUpForm } from './model/useSignUpForm'
-export { signUpSchema, signUpResponseSchema } from './model/signUpSchema'
-export type { SignUpInput, SignUpResponse } from './model/signUpSchema'
 export { SignUpForm } from './ui/SignUpForm/SignUpForm'

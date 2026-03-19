@@ -99,8 +99,6 @@ export const useVerifyEmail = () => {
 		isTimerRunning: isRunning,
 		isVerifying: verifyMutation.isPending,
 		isResending: resendMutation.isPending,
-		verifyError: verifyMutation.error,
-		resendError: resendMutation.error,
 		handleResend
 	}
 }

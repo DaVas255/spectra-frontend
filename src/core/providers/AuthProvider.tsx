@@ -3,10 +3,11 @@
 import { usePathname } from 'next/navigation'
 import { useEffect } from 'react'
 
+import '@/core/api/sessionClient'
+import { PUBLIC_ROUTES } from '@/core/config/publicRoutes'
 import { useAppDispatch } from '@/core/store'
 import { clearUser, setUser } from '@/entities/user'
 import { signInApi } from '@/features/auth/sign-in'
-import { PUBLIC_ROUTES } from '@/shared/constants'
 import { tokenService } from '@/shared/lib'
 
 export function AuthProvider({ children }: { children: React.ReactNode }) {

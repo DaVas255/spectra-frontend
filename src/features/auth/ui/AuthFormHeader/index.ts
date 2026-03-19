@@ -1,1 +1,0 @@
-export { AuthFormHeader } from './AuthFormHeader'

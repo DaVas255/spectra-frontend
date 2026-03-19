@@ -4,7 +4,8 @@ import Link from 'next/link'
 
 import styles from './Header.module.scss'
 import { useAppSelector } from '@/core/store'
-import { User, UserMenu } from '@/entities/user'
+import type { User } from '@/entities/user'
+import { LogoutMenu } from '@/features/auth/logout'
 
 export function Header() {
 	const user = useAppSelector((state): User | null => state.user.user)
@@ -19,7 +20,7 @@ export function Header() {
 					Spectra
 				</Link>
 
-				<nav className={styles.nav}>{user && <UserMenu />}</nav>
+				<nav className={styles.nav}>{user && <LogoutMenu />}</nav>
 			</div>
 		</header>
 	)

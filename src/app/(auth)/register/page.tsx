@@ -1,7 +1,7 @@
-import { AuthForm } from '@/features/auth'
+import { SignUpForm } from '@/features/auth/sign-up'
 
 const RegisterPage = () => {
-	return <AuthForm isLogin={false} />
+	return <SignUpForm />
 }
 
 export default RegisterPage

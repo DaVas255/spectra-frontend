@@ -5,13 +5,12 @@ import { useEffect } from 'react'
 
 import { useAppDispatch } from '@/core/store'
 import { clearUser, setUser } from '@/entities/user'
-import { authApi } from '@/features/auth'
+import { signInApi } from '@/features/auth/sign-in'
 import { PUBLIC_ROUTES } from '@/shared/constants'
 import { tokenService } from '@/shared/lib'
 
 export function AuthProvider({ children }: { children: React.ReactNode }) {
 	const pathname = usePathname()
-
 	const dispatch = useAppDispatch()
 
 	const isPublicRoute = PUBLIC_ROUTES.some(route => pathname.startsWith(route))
@@ -23,7 +22,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
 		const init = async () => {
 			try {
-				const { accessToken, user } = await authApi.refreshToken()
+				const { accessToken, user } = await signInApi.refreshToken()
 				tokenService.setAccessToken(accessToken)
 				dispatch(setUser(user))
 			} catch {
@@ -33,7 +32,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 		}
 
 		init()
-	}, [isPublicRoute])
+	}, [dispatch, isPublicRoute])
 
 	return children
 }

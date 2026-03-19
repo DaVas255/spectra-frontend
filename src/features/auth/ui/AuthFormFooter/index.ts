@@ -1,1 +1,0 @@
-export { AuthFormFooter } from './AuthFormFooter'

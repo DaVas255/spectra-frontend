@@ -31,10 +31,11 @@ export const SignUpForm = () => {
 					>
 						Email
 					</label>
-					<input
-						type='email'
-						id='email'
-						placeholder='your@email.com'
+						<input
+							type='email'
+							id='email'
+							autoComplete='email'
+							placeholder='your@email.com'
 						className={`${styles.input} ${
 							errors.email ? styles.inputError : ''
 						}`}
@@ -52,10 +53,11 @@ export const SignUpForm = () => {
 					>
 						Пароль
 					</label>
-					<input
-						type='password'
-						id='password'
-						placeholder='••••••'
+						<input
+							type='password'
+							id='password'
+							autoComplete='new-password'
+							placeholder='••••••'
 						className={`${styles.input} ${
 							errors.password ? styles.inputError : ''
 						}`}

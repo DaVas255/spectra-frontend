@@ -29,10 +29,11 @@ export const SignInForm = () => {
 					>
 						Email
 					</label>
-					<input
-						type='email'
-						id='email'
-						placeholder='your@email.com'
+						<input
+							type='email'
+							id='email'
+							autoComplete='email'
+							placeholder='your@email.com'
 						className={`${styles.input} ${
 							errors.email ? styles.inputError : ''
 						}`}
@@ -50,10 +51,11 @@ export const SignInForm = () => {
 					>
 						Пароль
 					</label>
-					<input
-						type='password'
-						id='password'
-						placeholder='••••••'
+						<input
+							type='password'
+							id='password'
+							autoComplete='current-password'
+							placeholder='••••••'
 						className={`${styles.input} ${
 							errors.password ? styles.inputError : ''
 						}`}

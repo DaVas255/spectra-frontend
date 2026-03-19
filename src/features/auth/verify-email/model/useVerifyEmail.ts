@@ -4,7 +4,7 @@ import { useMutation } from '@tanstack/react-query'
 import { message } from 'antd'
 import { AxiosError } from 'axios'
 import { useRouter, useSearchParams } from 'next/navigation'
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 
 import { verifyEmailApi } from '../api/verifyEmailApi'
 
@@ -21,6 +21,7 @@ interface VerifyEmailErrorResponse {
 export const useVerifyEmail = () => {
 	const router = useRouter()
 	const searchParams = useSearchParams()
+	const hasRequestedVerificationRef = useRef(false)
 
 	const [email, setEmail] = useState<string>('')
 	const [status, setStatus] = useState<VerificationStatus>('idle')
@@ -50,7 +51,8 @@ export const useVerifyEmail = () => {
 		},
 		onError: (err: AxiosError<VerifyEmailErrorResponse>) => {
 			setStatus('error')
-			setError(err.message || 'Ошибка подтверждения email')
+			setError(err.response?.data?.message || 'Ошибка подтверждения email')
+			message.error(err.response?.data?.message || 'Ошибка подтверждения email')
 		}
 	})
 
@@ -62,6 +64,8 @@ export const useVerifyEmail = () => {
 			startTimer()
 		},
 		onError: (err: AxiosError<VerifyEmailErrorResponse>) => {
+			setStatus('error')
+			setError(err.response?.data?.message || 'Ошибка отправки письма')
 			message.error(err.response?.data?.message || 'Ошибка отправки письма')
 		}
 	})
@@ -73,11 +77,14 @@ export const useVerifyEmail = () => {
 	}, [emailFromUrl])
 
 	useEffect(() => {
-		if (token && status === 'idle') {
-			setStatus('loading')
-			verifyMutation.mutate(token)
+		if (!token || hasRequestedVerificationRef.current) {
+			return
 		}
-	}, [token, status, verifyMutation])
+
+		hasRequestedVerificationRef.current = true
+		setStatus('loading')
+		verifyMutation.mutate(token)
+	}, [token])
 
 	const handleResend = () => {
 		if (!email || isRunning || resendMutation.isPending) return

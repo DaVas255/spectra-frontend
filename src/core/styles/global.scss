@@ -60,8 +60,10 @@ h6 {
 
 .main {
 	height: 93vh;
-	padding: 16px 24px;
+	max-width: 1400px;
+
 	display: flex;
 	justify-content: center;
 	align-items: center;
+	margin: 0 auto;
 }

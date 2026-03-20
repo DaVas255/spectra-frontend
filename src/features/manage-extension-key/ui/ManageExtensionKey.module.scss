@@ -1,0 +1,39 @@
+.mainContainer {
+	width: 100%;
+}
+
+.header {
+	display: flex;
+	align-items: center;
+	gap: 8px;
+}
+
+.extraText {
+	font-size: 12px;
+	color: rgba(0, 0, 0, 0.45);
+}
+
+.keyLabel {
+	font-size: 14px;
+	color: rgba(0, 0, 0, 0.45);
+}
+
+.keyField {
+	width: fit-content;
+	padding: 12px 16px;
+
+	background: #f5f5f5;
+	border-radius: 6px;
+
+	color: #52c41a;
+	font-weight: 500;
+}
+
+.divider {
+	margin: 0;
+}
+
+.description {
+	margin-bottom: 16px;
+	color: rgba(0, 0, 0, 0.45);
+}

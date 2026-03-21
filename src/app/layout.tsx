@@ -32,7 +32,9 @@ const RootLayout = ({ children }: Readonly<{ children: React.ReactNode }>) => {
 							<Suspense fallback={<Spin size='large' />}>
 								<AuthProvider>
 									<Header />
-									<main className='main'>{children}</main>
+									<main className='main'>
+										<div className='container'>{children}</div>
+									</main>
 								</AuthProvider>
 							</Suspense>
 						</AntdRegistry>

@@ -1,9 +1,13 @@
 .header {
-	padding: 16px 24px;
+	padding: 12px 24px;
 	position: sticky;
 	top: 0;
-	z-index: 100;
-	height: 7vh;
+	z-index: 1000;
+	background: linear-gradient(135deg, #2d2d52 0%, #252547 100%);
+	border-bottom: 2px solid rgba(169, 129, 208, 0.4);
+	box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+	backdrop-filter: blur(10px);
+	min-height: 60px;
 }
 
 .container {
@@ -12,24 +16,42 @@
 	display: flex;
 	align-items: center;
 	justify-content: space-between;
+	gap: 16px;
 }
 
 .logo {
-	font-size: 24px;
+	font-size: 22px;
 	font-weight: 700;
-	color: #ffffff;
+	color: #e8e8f0;
 	text-decoration: none;
-	transition: color 0.2s ease;
+	transition: all 0.3s ease;
+	letter-spacing: 0.5px;
 
 	&:hover {
 		color: #a981d0;
+		transform: scale(1.02);
 	}
 }
 
 .nav {
 	display: flex;
 	align-items: center;
-	gap: 16px;
+	gap: 12px;
+}
+
+.link {
+	color: #a981d0;
+	text-decoration: none;
+	font-size: 14px;
+	font-weight: 500;
+	padding: 6px 12px;
+	border-radius: 6px;
+	transition: all 0.2s ease;
+
+	&:hover {
+		color: #ffffff;
+		background: rgba(169, 129, 208, 0.2);
+	}
 }
 
 .userSection {

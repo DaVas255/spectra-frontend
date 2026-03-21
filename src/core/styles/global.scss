@@ -2,7 +2,6 @@ html,
 body {
 	height: 100%;
 	width: 100%;
-	overflow: hidden;
 }
 
 body {
@@ -60,10 +59,15 @@ h6 {
 
 .main {
 	height: 93vh;
-	max-width: 1400px;
+	padding: 16px 24px;
 
 	display: flex;
 	justify-content: center;
 	align-items: center;
+}
+
+.container {
+	max-width: 1400px;
+	width: 100%;
 	margin: 0 auto;
 }

@@ -48,7 +48,12 @@ export const LogoutMenu = () => {
 					icon={<UserOutlined />}
 					className={styles.avatar}
 				/>
-				<Text className={styles.email}>{user.email}</Text>
+				<Text
+					className={styles.email}
+					style={{ color: '#fff' }}
+				>
+					{user.email}
+				</Text>
 				<DownOutlined className={styles.arrow} />
 			</Space>
 		</Dropdown>

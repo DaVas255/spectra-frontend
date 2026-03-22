@@ -1,0 +1,72 @@
+.mainContainer {
+	width: 100%;
+}
+
+.header {
+	display: flex;
+	align-items: center;
+	gap: 8px;
+	line-height: 18px;
+}
+
+.siteList {
+	display: flex;
+	flex-direction: column;
+	gap: 12px;
+}
+
+.siteItem {
+	display: flex;
+	align-items: flex-start;
+	justify-content: space-between;
+	gap: 16px;
+	padding: 12px 16px;
+
+	border: 1px solid #f0f0f0;
+	border-radius: 8px;
+	background: #fafafa;
+	transition: all 0.2s ease;
+
+	&:hover {
+		border-color: #a981d0;
+		background: #f8f4fa;
+	}
+}
+
+.siteName {
+	display: flex;
+	align-items: center;
+	gap: 8px;
+	margin-bottom: 4px;
+	font-weight: 600;
+	color: rgba(0, 0, 0, 0.88);
+}
+
+.siteUrl {
+	color: rgba(0, 0, 0, 0.45);
+	word-break: break-word;
+	font-size: 13px;
+}
+
+.sitePattern {
+	color: rgba(0, 0, 0, 0.45);
+	word-break: break-word;
+	font-size: 12px;
+	margin-top: 2px;
+}
+
+.inactiveBadge {
+	display: inline-block;
+	padding: 2px 6px;
+	margin-left: 8px;
+	font-size: 11px;
+	font-weight: normal;
+	color: #ff4d4f;
+	background: #fff1f0;
+	border-radius: 4px;
+}
+
+.siteActions {
+	display: flex;
+	gap: 4px;
+}

@@ -1,9 +1,10 @@
 .header {
-	padding: 12px 24px;
 	position: sticky;
 	top: 0;
 	z-index: 1000;
-	min-height: 60px;
+
+	padding: 12px 24px;
+	height: 7vh;
 }
 
 .container {

@@ -34,9 +34,11 @@ export const MetricCard = ({
 
 	return (
 		<div className={styles.card}>
-			<div
+			<button
+				type='button'
 				className={styles.header}
 				onClick={handleToggle}
+				aria-expanded={isExpanded}
 				style={{ borderLeftColor: config.color }}
 			>
 				<div className={styles.headerTop}>
@@ -68,10 +70,10 @@ export const MetricCard = ({
 					<span className={styles.date}>{formatDate(metric.lastSeenAt)}</span>
 				</div>
 
-				<button className={styles.toggle}>
-					{isExpanded ? 'Свернуть' : 'Подробнее'}
-				</button>
-			</div>
+				<span className={styles.toggle}>
+					{isExpanded ? 'Свернуть' : 'Развернуть'}
+				</span>
+			</button>
 
 			{isExpanded && (
 				<div className={styles.body}>
